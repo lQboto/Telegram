@@ -1,8 +1,10 @@
 package com.ragalik.telegram
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import com.ragalik.telegram.activities.RegisterActivity
 import com.ragalik.telegram.databinding.ActivityMainBinding
 import com.ragalik.telegram.ui.fragments.ChatsFragment
 import com.ragalik.telegram.ui.objects.AppDrawer
@@ -26,10 +28,16 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initFunc() {
-        setSupportActionBar(mToolbar)
-        mAppDrawer.create()
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.dataContainer, ChatsFragment()).commit()
+        if (false) {
+            setSupportActionBar(mToolbar)
+            mAppDrawer.create()
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.dataContainer, ChatsFragment()).commit()
+        } else {
+            val intent = Intent(this, RegisterActivity::class.java)
+            startActivity(intent)
+        }
+
     }
 
     private fun initFields() {
