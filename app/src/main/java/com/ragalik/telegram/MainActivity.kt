@@ -3,14 +3,15 @@ package com.ragalik.telegram
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
 import com.ragalik.telegram.activities.RegisterActivity
 import com.ragalik.telegram.databinding.ActivityMainBinding
+import com.ragalik.telegram.model.User
 import com.ragalik.telegram.ui.fragments.ChatsFragment
 import com.ragalik.telegram.ui.`object`.AppDrawer
-import com.ragalik.telegram.util.AUTH
-import com.ragalik.telegram.util.initFirebase
-import com.ragalik.telegram.util.replaceActivity
-import com.ragalik.telegram.util.replaceFragment
+import com.ragalik.telegram.util.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -45,5 +46,13 @@ class MainActivity : AppCompatActivity() {
         mToolbar = mBinding.mainToolbar
         mAppDrawer = AppDrawer(this, mToolbar)
         initFirebase()
+        initUser()
+    }
+
+    private fun initUser() {
+        REF_DATABASE_ROOT.child(NODE_USERS).child(UID)
+            .addListenerForSingleValueEvent(AppValueEventListener{
+                USER = it.getValue(User::class.java) ?: User()
+            })
     }
 }
