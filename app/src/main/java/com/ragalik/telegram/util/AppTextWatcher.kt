@@ -1,4 +1,4 @@
-package com.ragalik.telegram.utilits
+package com.ragalik.telegram.util
 
 import android.text.Editable
 import android.text.TextWatcher

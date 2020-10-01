@@ -1,16 +1,15 @@
 package com.ragalik.telegram.ui.fragments
 
 import com.google.firebase.FirebaseException
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthProvider
 import com.ragalik.telegram.MainActivity
 import com.ragalik.telegram.R
 import com.ragalik.telegram.activities.RegisterActivity
-import com.ragalik.telegram.utilits.AUTH
-import com.ragalik.telegram.utilits.replaceActivity
-import com.ragalik.telegram.utilits.replaceFragment
-import com.ragalik.telegram.utilits.showToast
+import com.ragalik.telegram.util.AUTH
+import com.ragalik.telegram.util.replaceActivity
+import com.ragalik.telegram.util.replaceFragment
+import com.ragalik.telegram.util.showToast
 import kotlinx.android.synthetic.main.fragment_enter_phone_number.*
 import java.util.concurrent.TimeUnit
 

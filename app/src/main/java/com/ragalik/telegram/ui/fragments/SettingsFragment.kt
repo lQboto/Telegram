@@ -3,12 +3,12 @@ package com.ragalik.telegram.ui.fragments
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
-import androidx.fragment.app.Fragment
 import com.ragalik.telegram.MainActivity
 import com.ragalik.telegram.R
 import com.ragalik.telegram.activities.RegisterActivity
-import com.ragalik.telegram.utilits.AUTH
-import com.ragalik.telegram.utilits.replaceActivity
+import com.ragalik.telegram.util.AUTH
+import com.ragalik.telegram.util.replaceActivity
+import com.ragalik.telegram.util.replaceFragment
 
 
 class SettingsFragment : BaseFragment(R.layout.fragment_settings) {
@@ -27,6 +27,9 @@ class SettingsFragment : BaseFragment(R.layout.fragment_settings) {
             R.id.settings_menu_exit -> {
                 AUTH.signOut()
                 (activity as MainActivity).replaceActivity(RegisterActivity())
+            }
+            R.id.settings_menu_change_name -> {
+                replaceFragment(ChangeNameFragment())
             }
         }
         return true

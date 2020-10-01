@@ -3,19 +3,19 @@ package com.ragalik.telegram
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import com.google.firebase.auth.FirebaseAuth
 import com.ragalik.telegram.activities.RegisterActivity
 import com.ragalik.telegram.databinding.ActivityMainBinding
 import com.ragalik.telegram.ui.fragments.ChatsFragment
-import com.ragalik.telegram.ui.objects.AppDrawer
-import com.ragalik.telegram.utilits.AUTH
-import com.ragalik.telegram.utilits.replaceActivity
-import com.ragalik.telegram.utilits.replaceFragment
+import com.ragalik.telegram.ui.`object`.AppDrawer
+import com.ragalik.telegram.util.AUTH
+import com.ragalik.telegram.util.initFirebase
+import com.ragalik.telegram.util.replaceActivity
+import com.ragalik.telegram.util.replaceFragment
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var mBinding : ActivityMainBinding
-    private lateinit var mAppDrawer : AppDrawer
+    lateinit var mAppDrawer : AppDrawer
     private lateinit var mToolbar: Toolbar
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,6 +44,6 @@ class MainActivity : AppCompatActivity() {
     private fun initFields() {
         mToolbar = mBinding.mainToolbar
         mAppDrawer = AppDrawer(this, mToolbar)
-        AUTH = FirebaseAuth.getInstance()
+        initFirebase()
     }
 }
