@@ -1,15 +1,47 @@
 package com.ragalik.telegram.ui.fragments
 
-import android.widget.Toast
+import com.google.firebase.FirebaseException
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.PhoneAuthCredential
+import com.google.firebase.auth.PhoneAuthProvider
+import com.ragalik.telegram.MainActivity
 import com.ragalik.telegram.R
-import kotlinx.android.synthetic.main.fragment_enter_code.*
+import com.ragalik.telegram.activities.RegisterActivity
+import com.ragalik.telegram.utilits.AUTH
+import com.ragalik.telegram.utilits.replaceActivity
+import com.ragalik.telegram.utilits.replaceFragment
+import com.ragalik.telegram.utilits.showToast
 import kotlinx.android.synthetic.main.fragment_enter_phone_number.*
+import java.util.concurrent.TimeUnit
 
 
 class EnterPhoneNumberFragment : BaseFragment(R.layout.fragment_enter_phone_number) {
 
+    private lateinit var mPhoneNumber: String
+    private lateinit var mCallback: PhoneAuthProvider.OnVerificationStateChangedCallbacks
+
     override fun onStart() {
         super.onStart()
+        mCallback = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
+            override fun onVerificationCompleted(credential: PhoneAuthCredential) {
+                AUTH.signInWithCredential(credential).addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        showToast("Добро пожаловать")
+                        (activity as RegisterActivity).replaceActivity(MainActivity())
+                    } else {
+                        showToast(it.exception?.message.toString())
+                    }
+                }
+            }
+
+            override fun onCodeSent(id: String, token: PhoneAuthProvider.ForceResendingToken) {
+                replaceFragment(EnterCodeFragment(mPhoneNumber, id))
+            }
+
+            override fun onVerificationFailed(p0: FirebaseException) {
+                showToast(p0.message.toString())
+            }
+        }
         register_btn_next.setOnClickListener {
             sendCode()
         }
@@ -17,11 +49,20 @@ class EnterPhoneNumberFragment : BaseFragment(R.layout.fragment_enter_phone_numb
 
     private fun sendCode() {
         if (register_input_phone_number.text.toString().isEmpty()) {
-            Toast.makeText(activity, getString(R.string.register_toast_enter_phone), Toast.LENGTH_SHORT).show()
+            showToast(getString(R.string.register_toast_enter_phone))
         } else {
-            fragmentManager?.beginTransaction()
-                ?.replace(R.id.registerDataContainer, EnterCodeFragment())
-                ?.addToBackStack(null)?.commit()
+            authUser()
         }
+    }
+
+    private fun authUser() {
+        mPhoneNumber = register_input_phone_number.text.toString()
+        PhoneAuthProvider.getInstance().verifyPhoneNumber(
+            mPhoneNumber,
+            60,
+            TimeUnit.SECONDS,
+            activity as RegisterActivity,
+            mCallback
+        )
     }
 }

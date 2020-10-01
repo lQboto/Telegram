@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "851020033015",
+    "firebase_url": "https://telegram-771f3.firebaseio.com",
+    "project_id": "telegram-771f3",
+    "storage_bucket": "telegram-771f3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:851020033015:android:b87c52c6495b69edbf1cf2",
+        "android_client_info": {
+          "package_name": "com.ragalik.telegram"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "851020033015-ghe6jpda897og7u6vhcg73ktclr7p223.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAJlXCAG29rsaoyqORtI9fJEq0QfqC5A_U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "851020033015-ghe6jpda897og7u6vhcg73ktclr7p223.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

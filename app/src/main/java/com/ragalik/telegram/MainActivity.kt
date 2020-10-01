@@ -1,13 +1,16 @@
 package com.ragalik.telegram
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import com.google.firebase.auth.FirebaseAuth
 import com.ragalik.telegram.activities.RegisterActivity
 import com.ragalik.telegram.databinding.ActivityMainBinding
 import com.ragalik.telegram.ui.fragments.ChatsFragment
 import com.ragalik.telegram.ui.objects.AppDrawer
+import com.ragalik.telegram.utilits.AUTH
+import com.ragalik.telegram.utilits.replaceActivity
+import com.ragalik.telegram.utilits.replaceFragment
 
 class MainActivity : AppCompatActivity() {
 
@@ -28,14 +31,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initFunc() {
-        if (false) {
+        if (AUTH.currentUser != null) {
             setSupportActionBar(mToolbar)
             mAppDrawer.create()
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.dataContainer, ChatsFragment()).commit()
+            replaceFragment(ChatsFragment(), false)
         } else {
-            val intent = Intent(this, RegisterActivity::class.java)
-            startActivity(intent)
+            replaceActivity(RegisterActivity())
         }
 
     }
@@ -43,5 +44,6 @@ class MainActivity : AppCompatActivity() {
     private fun initFields() {
         mToolbar = mBinding.mainToolbar
         mAppDrawer = AppDrawer(this, mToolbar)
+        AUTH = FirebaseAuth.getInstance()
     }
 }

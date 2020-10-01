@@ -1,37 +1,43 @@
 package com.ragalik.telegram.ui.fragments
 
-import android.text.Editable
-import android.text.TextWatcher
-import android.widget.Toast
-import androidx.core.widget.addTextChangedListener
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.PhoneAuthProvider
+import com.ragalik.telegram.MainActivity
 import com.ragalik.telegram.R
+import com.ragalik.telegram.activities.RegisterActivity
+import com.ragalik.telegram.utilits.AUTH
+import com.ragalik.telegram.utilits.AppTextWatcher
+import com.ragalik.telegram.utilits.replaceActivity
+import com.ragalik.telegram.utilits.showToast
 import kotlinx.android.synthetic.main.fragment_enter_code.*
 
 
-class EnterCodeFragment : BaseFragment(R.layout.fragment_enter_code) {
+class EnterCodeFragment(val mPhoneNumber: String, val id: String) :
+    BaseFragment(R.layout.fragment_enter_code) {
+
+    private lateinit var mAuth: FirebaseAuth
 
     override fun onStart() {
         super.onStart()
-        register_input_code.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-
+        (activity as RegisterActivity).title = mPhoneNumber
+        register_input_code.addTextChangedListener(AppTextWatcher {
+            val string = register_input_code.text.toString()
+            if (string.length == 6) {
+                enterCode()
             }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-
-            }
-
-            override fun afterTextChanged(s: Editable?) {
-                val string = register_input_code.text.toString()
-                if (string.length == 6) {
-                    verifyCode()
-                }
-            }
-
         })
     }
 
-    fun verifyCode () {
-        Toast.makeText(activity, "Ok", Toast.LENGTH_SHORT).show()
+    private fun enterCode() {
+        val code = register_input_code.text.toString()
+        val credential = PhoneAuthProvider.getCredential(id, code)
+        AUTH.signInWithCredential(credential).addOnCompleteListener {
+            if (it.isSuccessful) {
+                showToast("Добро пожаловать")
+                (activity as RegisterActivity).replaceActivity(MainActivity())
+            } else {
+                showToast(it.exception?.message.toString())
+            }
+        }
     }
 }
