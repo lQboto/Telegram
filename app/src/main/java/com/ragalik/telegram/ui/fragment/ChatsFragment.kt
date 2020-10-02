@@ -1,4 +1,4 @@
-package com.ragalik.telegram.ui.fragments
+package com.ragalik.telegram.ui.fragment
 
 import androidx.fragment.app.Fragment
 import com.ragalik.telegram.R

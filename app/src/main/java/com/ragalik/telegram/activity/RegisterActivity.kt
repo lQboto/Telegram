@@ -1,11 +1,11 @@
-package com.ragalik.telegram.activities
+package com.ragalik.telegram.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.appcompat.widget.Toolbar
 import com.ragalik.telegram.R
 import com.ragalik.telegram.databinding.ActivityRegisterBinding
-import com.ragalik.telegram.ui.fragments.EnterPhoneNumberFragment
+import com.ragalik.telegram.ui.fragment.EnterPhoneNumberFragment
 import com.ragalik.telegram.util.initFirebase
 import com.ragalik.telegram.util.replaceFragment
 

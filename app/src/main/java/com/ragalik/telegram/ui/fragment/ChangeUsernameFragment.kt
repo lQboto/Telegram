@@ -1,4 +1,4 @@
-package com.ragalik.telegram.ui.fragments
+package com.ragalik.telegram.ui.fragment
 
 import com.ragalik.telegram.R
 import com.ragalik.telegram.util.*
@@ -7,7 +7,7 @@ import java.util.*
 
 class ChangeUsernameFragment : BaseChangeFragment(R.layout.fragment_change_username) {
 
-    lateinit var mNewUsername: String
+    private lateinit var mNewUsername: String
 
     override fun onResume() {
         super.onResume()
@@ -31,7 +31,7 @@ class ChangeUsernameFragment : BaseChangeFragment(R.layout.fragment_change_usern
     }
 
     private fun changeUsername() {
-        REF_DATABASE_ROOT.child(NODE_USERNAMES).child(mNewUsername).setValue(UID)
+        REF_DATABASE_ROOT.child(NODE_USERNAMES).child(mNewUsername).setValue(CURRENT_UID)
             .addOnCompleteListener {
                 if (it.isSuccessful) {
                     updateCurrentUsername()
@@ -42,7 +42,7 @@ class ChangeUsernameFragment : BaseChangeFragment(R.layout.fragment_change_usern
     }
 
     private fun updateCurrentUsername() {
-        REF_DATABASE_ROOT.child(NODE_USERS).child(UID).child(CHILD_USERNAME)
+        REF_DATABASE_ROOT.child(NODE_USERS).child(CURRENT_UID).child(CHILD_USERNAME)
             .setValue(mNewUsername)
             .addOnCompleteListener {
                 if (it.isSuccessful) {

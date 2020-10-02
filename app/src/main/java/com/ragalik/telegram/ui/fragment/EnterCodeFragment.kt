@@ -1,18 +1,15 @@
-package com.ragalik.telegram.ui.fragments
+package com.ragalik.telegram.ui.fragment
 
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.PhoneAuthProvider
 import com.ragalik.telegram.MainActivity
 import com.ragalik.telegram.R
-import com.ragalik.telegram.activities.RegisterActivity
+import com.ragalik.telegram.activity.RegisterActivity
 import com.ragalik.telegram.util.*
 import kotlinx.android.synthetic.main.fragment_enter_code.*
 
 
 class EnterCodeFragment(val phoneNumber: String, val id: String) :
     BaseFragment(R.layout.fragment_enter_code) {
-
-    private lateinit var mAuth: FirebaseAuth
 
     override fun onStart() {
         super.onStart()

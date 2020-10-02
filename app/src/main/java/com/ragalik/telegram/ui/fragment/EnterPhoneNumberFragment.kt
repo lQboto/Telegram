@@ -1,11 +1,11 @@
-package com.ragalik.telegram.ui.fragments
+package com.ragalik.telegram.ui.fragment
 
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthProvider
 import com.ragalik.telegram.MainActivity
 import com.ragalik.telegram.R
-import com.ragalik.telegram.activities.RegisterActivity
+import com.ragalik.telegram.activity.RegisterActivity
 import com.ragalik.telegram.util.AUTH
 import com.ragalik.telegram.util.replaceActivity
 import com.ragalik.telegram.util.replaceFragment
