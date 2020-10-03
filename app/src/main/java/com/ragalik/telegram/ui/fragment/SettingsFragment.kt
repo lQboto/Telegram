@@ -2,15 +2,12 @@ package com.ragalik.telegram.ui.fragment
 
 import android.app.Activity.RESULT_OK
 import android.content.Intent
-import android.net.Uri
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
-import com.google.firebase.storage.StorageReference
 import com.ragalik.telegram.R
 import com.ragalik.telegram.activity.RegisterActivity
 import com.ragalik.telegram.util.*
-import com.squareup.picasso.Picasso
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
 import kotlinx.android.synthetic.main.fragment_settings.*
@@ -28,7 +25,7 @@ class SettingsFragment : BaseFragment(R.layout.fragment_settings) {
         settings_bio.text = USER.bio
         settings_full_name.text = USER.fullname
         settings_phone_number.text = USER.phone
-        settings_status.text = USER.status
+        settings_status.text = USER.state
         settings_username.text = USER.username
         settings_btn_change_username.setOnClickListener {
             replaceFragment(ChangeUsernameFragment())
