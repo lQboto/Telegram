@@ -1,15 +1,12 @@
 package com.ragalik.telegram
 
-import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import com.ragalik.telegram.activity.RegisterActivity
 import com.ragalik.telegram.databinding.ActivityMainBinding
-import com.ragalik.telegram.model.User
 import com.ragalik.telegram.ui.fragment.ChatsFragment
 import com.ragalik.telegram.ui.`object`.AppDrawer
 import com.ragalik.telegram.util.*

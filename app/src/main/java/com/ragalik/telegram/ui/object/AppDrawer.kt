@@ -4,9 +4,6 @@ import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.view.View
 import android.widget.ImageView
-
-import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
 import com.mikepenz.materialdrawer.AccountHeader
 import com.mikepenz.materialdrawer.AccountHeaderBuilder
@@ -26,7 +23,7 @@ import com.ragalik.telegram.util.USER
 import com.ragalik.telegram.util.downloadAndSetImage
 import com.ragalik.telegram.util.replaceFragment
 
-class AppDrawer() {
+class AppDrawer {
 
     private lateinit var mDrawer: Drawer
     private lateinit var mHeader: AccountHeader
