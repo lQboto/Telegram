@@ -1,20 +1,18 @@
-package com.ragalik.telegram.ui.fragment
+package com.ragalik.telegram.ui.fragment.register
 
+import androidx.fragment.app.Fragment
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthProvider
-import com.ragalik.telegram.MainActivity
 import com.ragalik.telegram.R
-import com.ragalik.telegram.activity.RegisterActivity
-import com.ragalik.telegram.util.AUTH
-import com.ragalik.telegram.util.replaceActivity
-import com.ragalik.telegram.util.replaceFragment
-import com.ragalik.telegram.util.showToast
+import com.ragalik.telegram.database.AUTH
+import com.ragalik.telegram.ui.fragment.BaseFragment
+import com.ragalik.telegram.util.*
 import kotlinx.android.synthetic.main.fragment_enter_phone_number.*
 import java.util.concurrent.TimeUnit
 
 
-class EnterPhoneNumberFragment : BaseFragment(R.layout.fragment_enter_phone_number) {
+class EnterPhoneNumberFragment : Fragment(R.layout.fragment_enter_phone_number) {
 
     private lateinit var mPhoneNumber: String
     private lateinit var mCallback: PhoneAuthProvider.OnVerificationStateChangedCallbacks
@@ -26,7 +24,7 @@ class EnterPhoneNumberFragment : BaseFragment(R.layout.fragment_enter_phone_numb
                 AUTH.signInWithCredential(credential).addOnCompleteListener {
                     if (it.isSuccessful) {
                         showToast("Добро пожаловать")
-                        (activity as RegisterActivity).replaceActivity(MainActivity())
+                        restartActivity()
                     } else {
                         showToast(it.exception?.message.toString())
                     }
@@ -60,7 +58,7 @@ class EnterPhoneNumberFragment : BaseFragment(R.layout.fragment_enter_phone_numb
             mPhoneNumber,
             60,
             TimeUnit.SECONDS,
-            activity as RegisterActivity,
+            APP_ACTIVITY,
             mCallback
         )
     }

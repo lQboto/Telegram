@@ -1,19 +1,20 @@
-package com.ragalik.telegram.ui.fragment
+package com.ragalik.telegram.ui.fragment.register
 
+import androidx.fragment.app.Fragment
 import com.google.firebase.auth.PhoneAuthProvider
-import com.ragalik.telegram.MainActivity
 import com.ragalik.telegram.R
-import com.ragalik.telegram.activity.RegisterActivity
+import com.ragalik.telegram.database.*
+import com.ragalik.telegram.ui.fragment.BaseFragment
 import com.ragalik.telegram.util.*
 import kotlinx.android.synthetic.main.fragment_enter_code.*
 
 
 class EnterCodeFragment(val phoneNumber: String, val id: String) :
-    BaseFragment(R.layout.fragment_enter_code) {
+    Fragment(R.layout.fragment_enter_code) {
 
     override fun onStart() {
         super.onStart()
-        (activity as RegisterActivity).title = phoneNumber
+        APP_ACTIVITY.title = phoneNumber
         register_input_code.addTextChangedListener(AppTextWatcher {
             val string = register_input_code.text.toString()
             if (string.length == 6) {
@@ -39,7 +40,7 @@ class EnterCodeFragment(val phoneNumber: String, val id: String) :
                         REF_DATABASE_ROOT.child(NODE_USERS).child(uid).updateChildren(dateMap)
                             .addOnSuccessListener {
                                 showToast("Добро пожаловать")
-                                (activity as RegisterActivity).replaceActivity(MainActivity())
+                                restartActivity()
                             }
                             .addOnFailureListener { showToast(it.message.toString()) }
                     }
@@ -47,5 +48,10 @@ class EnterCodeFragment(val phoneNumber: String, val id: String) :
                 showToast(task.exception?.message.toString())
             }
         }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        hideKeyboard()
     }
 }

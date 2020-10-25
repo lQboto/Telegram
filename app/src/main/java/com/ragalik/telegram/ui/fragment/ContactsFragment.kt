@@ -9,7 +9,9 @@ import com.firebase.ui.database.FirebaseRecyclerAdapter
 import com.firebase.ui.database.FirebaseRecyclerOptions
 import com.google.firebase.database.DatabaseReference
 import com.ragalik.telegram.R
+import com.ragalik.telegram.database.*
 import com.ragalik.telegram.model.CommonModel
+import com.ragalik.telegram.ui.fragment.single_chat.SingleChatFragment
 import com.ragalik.telegram.util.*
 import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.android.synthetic.main.contact_item.view.*

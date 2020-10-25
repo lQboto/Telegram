@@ -1,5 +1,7 @@
 package com.ragalik.telegram.util
 
+import com.ragalik.telegram.database.*
+
 enum class AppStates(val state: String) {
     ONLINE("в сети"),
     OFFLINE("был недавно"),

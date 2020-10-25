@@ -5,10 +5,13 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
-import com.ragalik.telegram.activity.RegisterActivity
+import com.ragalik.telegram.database.AUTH
+import com.ragalik.telegram.database.initFirebase
+import com.ragalik.telegram.database.initUser
 import com.ragalik.telegram.databinding.ActivityMainBinding
-import com.ragalik.telegram.ui.fragment.ChatsFragment
+import com.ragalik.telegram.ui.fragment.MainFragment
 import com.ragalik.telegram.ui.`object`.AppDrawer
+import com.ragalik.telegram.ui.fragment.register.EnterPhoneNumberFragment
 import com.ragalik.telegram.util.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -36,18 +39,18 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initFunc() {
+        setSupportActionBar(mToolbar)
         if (AUTH.currentUser != null) {
-            replaceFragment(ChatsFragment(), false)
+            mAppDrawer.create()
+            replaceFragment(MainFragment(), false)
         } else {
-            replaceActivity(RegisterActivity())
+            replaceFragment(EnterPhoneNumberFragment(), false)
         }
     }
 
     private fun initFields() {
         mToolbar = mBinding.mainToolbar
         mAppDrawer = AppDrawer()
-        setSupportActionBar(mToolbar)       // МОЯ
-        mAppDrawer.create()                 //      ДОРАБОТКА
     }
 
     override fun onStart() {
