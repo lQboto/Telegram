@@ -13,6 +13,7 @@ import com.ragalik.telegram.model.CommonModel
 import com.ragalik.telegram.model.UserModel
 import com.ragalik.telegram.util.APP_ACTIVITY
 import com.ragalik.telegram.util.AppValueEventListener
+import com.ragalik.telegram.util.TYPE_MESSAGE_IMAGE
 import com.ragalik.telegram.util.showToast
 import java.util.ArrayList
 
@@ -30,6 +31,7 @@ const val NODE_MESSAGES = "messages"
 const val NODE_PHONES = "phones"
 const val NODE_PHONES_CONTACTS = "phones_contacts"
 const val FOLDER_PROFILE_IMAGE = "profile_image"
+const val FOLDER_MESSAGE_IMAGE = "message_image"
 
 const val CHILD_ID = "id"
 const val CHILD_PHONE = "phone"
@@ -42,6 +44,7 @@ const val CHILD_TEXT = "text"
 const val CHILD_TYPE = "type"
 const val CHILD_FROM = "from"
 const val CHILD_TIME_STAMP = "timeStamp"
+const val CHILD_IMAGE_URL = "imageUrl"
 
 fun initFirebase() {
     AUTH = FirebaseAuth.getInstance()
@@ -112,6 +115,7 @@ fun sendMessage(message: String, receivingUserId: String, typeText: String, func
     mapMassage[CHILD_FROM] = CURRENT_UID
     mapMassage[CHILD_TYPE] = typeText
     mapMassage[CHILD_TEXT] = message
+    mapMassage[CHILD_ID] = messageKey.toString()
     mapMassage[CHILD_TIME_STAMP] = ServerValue.TIMESTAMP
 
     val mapDialog = hashMapOf<String, Any>()
@@ -121,6 +125,26 @@ fun sendMessage(message: String, receivingUserId: String, typeText: String, func
     REF_DATABASE_ROOT
         .updateChildren(mapDialog)
         .addOnSuccessListener { function() }
+        .addOnFailureListener { showToast(it.message.toString()) }
+}
+
+fun sendMessageAsImage(receivingUserId: String, imageUrl: String, messageKey: String) {
+    val refDialogUser = "$NODE_MESSAGES/$CURRENT_UID/$receivingUserId"
+    val refDialogReceivingUser = "$NODE_MESSAGES/$receivingUserId/$CURRENT_UID"
+
+    val mapMassage = hashMapOf<String, Any>()
+    mapMassage[CHILD_FROM] = CURRENT_UID
+    mapMassage[CHILD_TYPE] = TYPE_MESSAGE_IMAGE
+    mapMassage[CHILD_ID] = messageKey
+    mapMassage[CHILD_TIME_STAMP] = ServerValue.TIMESTAMP
+    mapMassage[CHILD_IMAGE_URL] = imageUrl
+
+    val mapDialog = hashMapOf<String, Any>()
+    mapDialog["$refDialogUser/$messageKey"] = mapMassage
+    mapDialog["$refDialogReceivingUser/$messageKey"] = mapMassage
+
+    REF_DATABASE_ROOT
+        .updateChildren(mapDialog)
         .addOnFailureListener { showToast(it.message.toString()) }
 }
 
@@ -160,6 +184,7 @@ fun setNameToDatabase(fullname: String) {
             APP_ACTIVITY.supportFragmentManager.popBackStack()
         }.addOnFailureListener { showToast(it.message.toString()) }
 }
+
 
 fun DataSnapshot.getCommonModel(): CommonModel =
     this.getValue(CommonModel::class.java) ?: CommonModel()
