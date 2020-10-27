@@ -3,6 +3,7 @@ package com.ragalik.telegram.ui.fragment.single_chat
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
+import android.net.Uri
 import android.view.MotionEvent
 import android.view.View
 import android.widget.AbsListView
@@ -19,6 +20,7 @@ import com.ragalik.telegram.database.*
 import com.ragalik.telegram.model.CommonModel
 import com.ragalik.telegram.model.UserModel
 import com.ragalik.telegram.ui.fragment.BaseFragment
+import com.ragalik.telegram.ui.fragment.message_recycler_view.view.AppViewFactory
 import com.ragalik.telegram.util.*
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
@@ -46,6 +48,7 @@ class SingleChatFragment(private val contact: CommonModel) :
     private var mSmoothScrollToPosition = true
     private lateinit var mSwipeRefreshLayout: SwipeRefreshLayout
     private lateinit var mLayoutManager: LinearLayoutManager
+    private lateinit var mAppVoiceRecorder: AppVoiceRecorder
 
     override fun onResume() {
         super.onResume()
@@ -56,6 +59,7 @@ class SingleChatFragment(private val contact: CommonModel) :
 
     @SuppressLint("ClickableViewAccessibility")
     private fun initFields() {
+        mAppVoiceRecorder = AppVoiceRecorder()
         mSwipeRefreshLayout = chat_swipe_refresh
         mLayoutManager = LinearLayoutManager(this.context)
         chat_input_message.addTextChangedListener(AppTextWatcher {
@@ -75,15 +79,21 @@ class SingleChatFragment(private val contact: CommonModel) :
             attachFile()
         }
 
-        CoroutineScope(Dispatchers.IO).launch {
+        CoroutineScope(Dispatchers.Main).launch {
             chat_bth_voice.setOnTouchListener { view, motionEvent ->
                 if (checkPermission(RECORD_AUDIO)) {
                     if (motionEvent.action == MotionEvent.ACTION_DOWN) {
                         chat_input_message.setText("Запись")
                         chat_bth_voice.setColorFilter(ContextCompat.getColor(APP_ACTIVITY, R.color.primary))
+                        val messageKey = getMessageKey(contact.id)
+                        mAppVoiceRecorder.startRecord(messageKey)
                     } else if (motionEvent.action == MotionEvent.ACTION_UP) {
                         chat_input_message.setText("")
                         chat_bth_voice.colorFilter = null
+                        mAppVoiceRecorder.stopRecord { file, messageKey ->
+                            uploadFileToStorage(Uri.fromFile(file), messageKey, contact.id, TYPE_MESSAGE_VOICE)
+                            mSmoothScrollToPosition = true
+                        }
                     }
                 }
                 true
@@ -103,17 +113,10 @@ class SingleChatFragment(private val contact: CommonModel) :
             && resultCode == Activity.RESULT_OK && data != null
         ) {
             val uri = CropImage.getActivityResult(data).uri
-            val messageKey = REF_DATABASE_ROOT.child(NODE_MESSAGES).child(CURRENT_UID)
-                .child(contact.id).push().key.toString()
+            val messageKey = getMessageKey(contact.id)
 
-            val path = REF_STORAGE_ROOT.child(FOLDER_MESSAGE_IMAGE)
-                .child(messageKey)
-            putImageToStorage(uri, path) {
-                getUrlFromStorage(path) {
-                    sendMessageAsImage(contact.id, it, messageKey)
-                    mSmoothScrollToPosition = true
-                }
-            }
+            uploadFileToStorage(uri, messageKey, contact.id, TYPE_MESSAGE_IMAGE)
+            mSmoothScrollToPosition = true
         }
     }
 
@@ -132,11 +135,11 @@ class SingleChatFragment(private val contact: CommonModel) :
         mMessagesListener = AppChildEventListener {
             val message = it.getCommonModel()
             if (mSmoothScrollToPosition) {
-                mAdapter.addItemToBottom(message) {
+                mAdapter.addItemToBottom(AppViewFactory.getView(message)) {
                     mRecyclerView.smoothScrollToPosition(mAdapter.itemCount)
                 }
             } else {
-                mAdapter.addItemToTop(message) {
+                mAdapter.addItemToTop(AppViewFactory.getView(message)) {
                     mSwipeRefreshLayout.isRefreshing = false
                 }
             }
@@ -210,5 +213,10 @@ class SingleChatFragment(private val contact: CommonModel) :
         mToolbarInfo.visibility = View.GONE
         mRefUser.removeEventListener(mListenerInfoToolbar)
         mRefMessages.removeEventListener(mMessagesListener)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mAppVoiceRecorder.releaseRecorder()
     }
 }
